@@ -1,0 +1,22 @@
+/* Empty. Add your own CSS if you like */
+
+#circle {
+  vertical-align: middle;
+	width: 100px;
+	height: 100px;
+	background: #8ACCE2;
+	-moz-border-radius: 50px;
+	-webkit-border-radius: 50px;
+	border-radius: 50px;
+  border-color: #366B8C;
+  border-width: 3px;
+}
+
+#rectangle {
+  vertical-align: middle;
+	width: 100px;
+	height: 100px;
+	background: #8ACCE2;
+  border-color: #366B8C;
+  border-width: 3px;
+}
