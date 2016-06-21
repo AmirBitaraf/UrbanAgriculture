@@ -23,7 +23,7 @@ angular.module('starter',['ionic'])
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider ) {
   $stateProvider
   .state('index', {
     url: '/',
@@ -43,5 +43,22 @@ angular.module('starter',['ionic'])
       $scope.navigateToNext = function() {
             $state.go('result');
        };
+
+      	$scope.getLocation = function(){
+
+       		console.log("clicked");
+			var posOptions = {timeout: 10000, enableHighAccuracy: false};
+			navigator.geolocation
+			.getCurrentPosition(
+			function (position) {
+				var lat  = position.coords.latitude
+				var long = position.coords.longitude
+
+				console.log(lat) ;
+				console.log(long);
+			},function(err){
+
+			},posOptions);
+		};
     }
 })
