@@ -32,20 +32,51 @@ angular.module('starter',['ionic'])
   })
   .state('result', {
     url: '/result',
-    templateUrl: 'result.html'
+    templateUrl: 'result.html',
+    controller: "ResultCtrl"
   });
   $urlRouterProvider.otherwise('/');
 })
 
-.controller('QuestionsCtrl', function($scope, $location, $state) {
+.controller('QuestionsCtrl', function($scope, $location, $http, $state, $rootScope) {
     {
         // Use our scope for the scope of the modal to keep it simple
       $scope.navigateToNext = function() {
-            $state.go('result');
+
+            var link = 'http://amirbitaraf.ir/urban/';
+            console.log($scope.location);
+            $http.post(link, {
+              budget: $scope.budget.select,
+              light: $scope.light.select,
+              location: $scope.location
+              }).then(function (res){
+                $rootScope.res = res.data;
+                $state.go('result');
+            },function(err){
+              console.log(err);
+              alert("An Error Occured Connecting to Server!");
+              $scope.btn.btnClick=false;
+            });
        };
 
-      	$scope.getLocation = function(){
+       var cc = require('country-city');
 
+       $scope.countries = cc.getCountries();
+       $scope.cities = cc.getCities($scope.countries[0]);
+       $scope.location = {};
+       $scope.budget = {};
+       $scope.light = {};
+       $scope.btn = {};
+       $scope.gps = {};
+
+       $scope.changeCity = function(newVal){
+         console.log(newVal);
+         $scope.cities = cc.getCities(newVal);
+         $scope.location.city = $scope.cities[0];
+       };
+
+
+      	$scope.getLocation = function(){
        		console.log("clicked");
 			var posOptions = {timeout: 10000, enableHighAccuracy: false};
 			navigator.geolocation
@@ -54,11 +85,19 @@ angular.module('starter',['ionic'])
 				var lat  = position.coords.latitude
 				var long = position.coords.longitude
 
-				console.log(lat) ;
-				console.log(long);
+				$scope.location.lat = lat;
+        $scope.location.long = long;
 			},function(err){
-
+          alert("An Error Occured Getting GPS Data.");
+          $scope.gps.gps = false;
 			},posOptions);
 		};
+    }
+})
+.controller('ResultCtrl', function($scope, $location, $state, $rootScope) {
+    {
+      $scope.result = {
+        html : $rootScope.res
+      }
     }
 })
